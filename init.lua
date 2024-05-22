@@ -872,6 +872,31 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
+  {
+    'rcarriga/nvim-dap-ui',
+    event = 'VeryLazy',
+    dependencies = 'mfussenegger/nvim-dap',
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+      require('dapui').setup()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+    end,
+  },
+  {
+    'mfussenegger/nvim-dap',
+    config = function()
+      require 'custom.dap'
+    end,
+  },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
