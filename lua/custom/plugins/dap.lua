@@ -85,7 +85,6 @@ return {
       {
         '<leader>da',
         function()
-          require('dap.ext.vscode').json_decode = require('json5').parse
           --          if vim.fn.filereadable '.vscode/launch.json' then
           local dap_vscode = require 'dap.ext.vscode'
           dap_vscode.load_launchjs(nil, {
