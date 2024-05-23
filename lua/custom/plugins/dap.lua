@@ -43,7 +43,7 @@ return {
               return coroutine.create(function()
                 vim.ui.input({
                   prompt = 'Enter URL: ',
-                  default = 'http://localhost:3000',
+                  default = 'http://local.coschedule.com:8000',
                 }, function(url)
                   if url == nil or url == '' then
                     return
@@ -86,12 +86,12 @@ return {
         '<leader>da',
         function()
           --          if vim.fn.filereadable '.vscode/launch.json' then
-          local dap_vscode = require 'dap.ext.vscode'
-          dap_vscode.load_launchjs(nil, {
-            ['pwa-node'] = js_based_languages,
-            ['chrome'] = js_based_languages,
-            ['pwa-chrome'] = js_based_languages,
-          })
+          --          local dap_vscode = require 'dap.ext.vscode'
+          --          dap_vscode.load_launchjs(nil, {
+          --            ['pwa-node'] = js_based_languages,
+          --            ['chrome'] = js_based_languages,
+          --            ['pwa-chrome'] = js_based_languages,
+          --          })
           --         end
           require('dap').continue()
         end,
