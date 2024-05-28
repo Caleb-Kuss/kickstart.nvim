@@ -69,33 +69,130 @@ return {
     end,
     keys = {
       {
+        '<leader>Td',
+        function()
+          require('neotest').run.run { strategy = 'dap' }
+        end,
+        desc = 'Run Neotest with DAP strategy',
+      },
+      {
+        '<leader>dB',
+        function()
+          require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+        end,
+        desc = 'Set conditional breakpoint',
+      },
+      {
+        '<leader>db',
+        function()
+          require('dap').toggle_breakpoint()
+        end,
+        desc = 'Toggle breakpoint',
+      },
+      {
+        '<leader>dc',
+        function()
+          require('dap').continue()
+        end,
+        desc = 'Continue execution',
+      },
+      {
+        '<leader>dC',
+        function()
+          require('dap').run_to_cursor()
+        end,
+        desc = 'Run to cursor',
+      },
+      {
+        '<leader>dg',
+        function()
+          require('dap').goto_()
+        end,
+        desc = 'Go to line',
+      },
+      {
+        '<leader>di',
+        function()
+          require('dap').step_into()
+        end,
+        desc = 'Step into',
+      },
+      {
+        '<leader>dj',
+        function()
+          require('dap').down()
+        end,
+        desc = 'Move down the call stack',
+      },
+      {
+        '<leader>dk',
+        function()
+          require('dap').up()
+        end,
+        desc = 'Move up the call stack',
+      },
+      {
+        '<leader>dl',
+        function()
+          require('dap').run_last()
+        end,
+        desc = 'Re-run last debug session',
+      },
+      {
         '<leader>dO',
         function()
           require('dap').step_out()
         end,
-        desc = 'Step Out',
+        desc = 'Step out',
       },
       {
         '<leader>do',
         function()
           require('dap').step_over()
         end,
-        desc = 'Step Over',
+        desc = 'Step over',
+      },
+      {
+        '<leader>dp',
+        function()
+          require('dap').pause()
+        end,
+        desc = 'Pause execution',
+      },
+      {
+        '<leader>dr',
+        function()
+          require('dap').repl.toggle()
+        end,
+        desc = 'Toggle REPL',
+      },
+      {
+        '<leader>ds',
+        function()
+          require('dap').session()
+        end,
+        desc = 'Show active session',
+      },
+      {
+        '<leader>dt',
+        function()
+          require('dap').terminate()
+        end,
+        desc = 'Terminate session',
+      },
+      {
+        '<leader>dh',
+        function()
+          require('dap.ui.widgets').hover()
+        end,
+        desc = 'Show hover information',
       },
       {
         '<leader>da',
         function()
-          --          if vim.fn.filereadable '.vscode/launch.json' then
-          --          local dap_vscode = require 'dap.ext.vscode'
-          --          dap_vscode.load_launchjs(nil, {
-          --            ['pwa-node'] = js_based_languages,
-          --            ['chrome'] = js_based_languages,
-          --            ['pwa-chrome'] = js_based_languages,
-          --          })
-          --         end
           require('dap').continue()
         end,
-        desc = 'Run with Args',
+        desc = 'Attach Debugger',
       },
     },
     dependencies = {
