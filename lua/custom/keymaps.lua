@@ -36,3 +36,7 @@ keymap.set('n', '<C-S-h>', '<C-w><')
 keymap.set('n', '<C-S-l>', '<C-w>>')
 keymap.set('n', '<C-S-k>', '<C-w>+')
 keymap.set('n', '<C-S-j>', '<C-w>-')
+
+-- Move Line up or down
+keymap.set('v', 'J', ":m '>+1<CR>gv=gv'")
+keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
