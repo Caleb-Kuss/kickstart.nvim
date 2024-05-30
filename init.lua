@@ -777,13 +777,21 @@ require('lazy').setup({
     end,
   },
   {
-    'AlexvZyl/nordic.nvim',
-    lazy = false,
-    priority = 1000,
+    'b0o/lavi.nvim',
+    dependencies = { 'rktjmp/lush.nvim' },
     config = function()
-      require('nordic').load()
+      vim.cmd [[colorscheme lavi]]
     end,
   },
+  --  First color scheme.
+  -- {
+  --   'AlexvZyl/nordic.nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     require('nordic').load()
+  --   end,
+  -- },
   --  { -- You can easily change to a different colorscheme.
   --    -- Change the name of the colorscheme plugin below, and then
   --    -- change the command in the config to whatever the name of that colorscheme is.
