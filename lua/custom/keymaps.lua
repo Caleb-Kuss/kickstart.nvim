@@ -32,3 +32,10 @@ keymap.set('n', '<C-S-j>', '<C-w>-')
 -- Move Line up or down
 keymap.set('v', 'J', ":m '>+1<CR>gv=gv'")
 keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- Delete No Name Buffer
+vim.api.nvim_create_user_command('DeleteNoNameBuffers', function()
+  vim.cmd [[
+    bufdo if getbufvar(bufnr('%'), '&buftype') == '' && getbufvar(bufnr('%'), '&modified') == 0 && bufname('%') == '' | bdelete | endif
+  ]]
+end, {})
