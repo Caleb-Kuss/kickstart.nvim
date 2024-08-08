@@ -1,14 +1,23 @@
 return {
   'cowboy8625/epoc.nvim',
   config = function()
-    local wk = require 'which-key'
-    wk.register({
-      E = {
-        name = 'Epoch Time',
-        t = { ':EpochTimeConvertToClipboard<CR>', 'Convert to Clipboard' },
-        c = { ':EpochTimeCurrentToClipboard<CR>', 'Current to Clipboard' },
-        p = { ':EpochTimeConvertAndPopup<CR>', 'Convert and Popup' },
-      },
-    }, { prefix = '<leader>' })
+    vim.api.nvim_set_keymap(
+      'n',
+      '<leader>Et',
+      ':lua require("epoc").EpochTimeConvertToClipboard()<CR>',
+      { noremap = true, silent = true, desc = 'EpochTimeConvertToClipboard' }
+    )
+    vim.api.nvim_set_keymap(
+      'n',
+      '<leader>Ec',
+      ':lua require("epoc").EpochTimeCurrentToClipboard()<CR>',
+      { noremap = true, silent = true, desc = 'EpochTimeCurrentToClipboard' }
+    )
+    vim.api.nvim_set_keymap(
+      'n',
+      '<leader>Ep',
+      ':lua require("epoc").EpochTimeConvertAndPopup()<CR>',
+      { noremap = true, silent = true, desc = 'EpochTimeConvertAndPopup' }
+    )
   end,
 }
