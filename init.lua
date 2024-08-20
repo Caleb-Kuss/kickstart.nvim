@@ -848,36 +848,35 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
-  {
-    'rcarriga/nvim-dap-ui',
-    event = 'VeryLazy',
-    dependencies = 'mfussenegger/nvim-dap',
-    config = function()
-      local dap = require 'dap'
-      local dapui = require 'dapui'
-      require('dapui').setup()
-      dap.listeners.after.event_initialized['dapui_config'] = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated['dapui_config'] = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited['dapui_config'] = function()
-        dapui.close()
-      end
-    end,
-  },
-  {
-    'mfussenegger/nvim-dap',
-    config = function()
-      require 'custom.dap'
-    end,
-  },
-
+  -- {
+  --   'rcarriga/nvim-dap-ui',
+  --   event = 'VeryLazy',
+  --   dependencies = 'mfussenegger/nvim-dap',
+  --   config = function()
+  --     local dap = require 'dap'
+  --     local dapui = require 'dapui'
+  --     require('dapui').setup()
+  --     dap.listeners.after.event_initialized['dapui_config'] = function()
+  --       dapui.open()
+  --     end
+  --     dap.listeners.before.event_terminated['dapui_config'] = function()
+  --       dapui.close()
+  --     end
+  --     dap.listeners.before.event_exited['dapui_config'] = function()
+  --       dapui.close()
+  --     end
+  --   end,
+  -- },
+  -- {
+  --   'mfussenegger/nvim-dap',
+  --   config = function()
+  --     require 'custom.dap'
+  --   end,
+  -- },
+  require 'kickstart.plugins.debug',
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
-
   -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
   --
   --  Here are some example plugins that I've included in the Kickstart repository.
@@ -889,7 +888,6 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
