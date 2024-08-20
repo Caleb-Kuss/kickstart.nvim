@@ -21,7 +21,7 @@ return {
             request = 'launch',
             name = 'Launch file',
             program = '${file}',
-            cwd = '${workspaceFolder}',
+            cwd = vim.fn.getcwd(),
             sourceMaps = true,
           },
           -- Debug nodejs processes (make sure to add --inspect when you run the process)
@@ -30,17 +30,33 @@ return {
             request = 'attach',
             name = 'Attach',
             processId = require('dap.utils').pick_process,
-            cwd = '${workspaceFolder}',
+            cwd = vim.fn.getcwd(),
             sourceMaps = true,
           },
           -- Debug web applications (client side)
           {
             type = 'pwa-chrome',
             request = 'launch',
-            name = 'Start Chrome with "localhost"',
-            url = 'http://localhost:3000',
-            webRoot = '${workspaceFolder}',
-            userDataDir = '${workspaceFolder}/.vscode/vscode-chrome-debug-userdatadir',
+            name = 'Launch & Debug Chrome',
+            url = function()
+              local co = coroutine.running()
+              return coroutine.create(function()
+                vim.ui.input({
+                  prompt = 'Enter URL: ',
+                  default = 'http://local.coschedule.com:8000',
+                }, function(url)
+                  if url == nil or url == '' then
+                    return
+                  else
+                    coroutine.resume(co, url)
+                  end
+                end)
+              end)
+            end,
+            webRoot = vim.fn.getcwd(),
+            protocol = 'inspector',
+            sourceMaps = true,
+            userDataDir = false,
           },
           -- Divider for the launch.json derived configs
           {
@@ -247,13 +263,4 @@ return {
       },
     },
   },
-  {
-    table.insert(vim._so_trails, '/?.dylib'),
-
-    require('dap.ext.vscode').load_launchjs(
-      nil,
-      { ['pwa-node'] = js_based_languages, ['node'] = js_based_languages, ['chrome'] = js_based_languages, ['pwa-chrome'] = js_based_languages }
-    ),
-  },
 }
--- https://miguelcrespo.co/posts/debugging-javascript-applications-with-neovim/
