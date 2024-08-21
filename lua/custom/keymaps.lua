@@ -43,3 +43,8 @@ end, {})
 -- Diagnostics
 vim.keymap.set('n', '<leader>ne', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<leader>pe', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+
+-- Copy File Path
+vim.api.nvim_set_keymap('n', '<leader>Cr', ':let @+ = expand("%") | echo "Copied: " . expand("%")<CR>', { desc = 'Copy [R]elative [P]ath' })
+vim.api.nvim_set_keymap('n', '<leader>Ca', ':let @+ = expand("%:p") | echo "Copied: " . expand("%:p")<CR>', { desc = 'Copy [Absolute [P]ath' })
+vim.api.nvim_set_keymap('n', '<leader>Cf', ':let @+ = expand("%:t") | echo "Copied: " . expand("%:t")<CR>', { desc = 'Copy [F]ile [P]ath' })
