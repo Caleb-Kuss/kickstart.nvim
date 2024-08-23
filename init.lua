@@ -607,6 +607,11 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'shellcheck', -- Used to lint shell scripts
+        'shfmt', -- Used to format shell scripts
+        'gopls', -- Used to format Go code
+        'jsonls', -- Used to format JSON
+        'yamlls', -- Used to format YAML
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -653,10 +658,13 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
 
+        go = { { 'gofmt' } },
+
         javascript = {
           { 'prettier', args = { '--trailing-comma', 'all' } },
           { 'eslint' },
         },
+
         typescript = {
           { 'prettier', args = { '--trailing-comma', 'all' } },
           { 'eslint' },
