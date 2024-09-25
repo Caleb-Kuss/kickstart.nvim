@@ -684,6 +684,9 @@ require('lazy').setup({
         markdown = { 'prettier' },
         graphql = { 'prettier' },
         python = { 'isort', 'black' },
+        handlebars = {
+          { 'prettier', args = { '--parser', 'glimmer' } },
+        },
       },
     },
   },
