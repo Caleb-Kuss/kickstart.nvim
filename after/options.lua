@@ -4,3 +4,4 @@ if uname.sysname == 'Darwin' then
   vim.opt.binary = true
   vim.opt.eol = false
 end
+vim.opt.fixendofline = false

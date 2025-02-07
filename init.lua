@@ -236,9 +236,35 @@ require('lazy').setup({
   --
   --  This is equivalent to:
   --    require('Comment').setup({})
+  config = function()
+    -- LSP setup using nvim-lspconfig
+    local lspconfig = require('lspconfig')
+    local null_ls = require('null-ls')
 
+    -- ESLint setup with lspconfig
+    require 'lspconfig'.eslint.setup({
+      settings = {
+        eslint = {
+          cmd = { "eslint-lsp", "--stdio" },
+          enable = true,
+          configFile = ".eslintrc.cjs",                                                    -- Pointing to your ESLint config file
+          packageManager = "npm",                                                          -- You can use npm or yarn
+          validate = { "javascript", "typescript", "javascriptreact", "typescriptreact" }, -- Specify which languages to validate
+          run = "onType",                                                                  -- Option for when ESLint runs
+        },
+      },
+      filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "html", "handlebars", "glimmer" },
+    })
+    -- null-ls setup for ESLint diagnostics and formatting
+    null_ls.setup({
+      sources = {
+        null_ls.builtins.diagnostics.eslint, -- Use ESLint for diagnostics
+        null_ls.builtins.formatting.eslint,  -- Use ESLint for formatting
+      },
+    })
+  end,
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',    opts = {} },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -273,7 +299,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -324,7 +350,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -417,13 +443,20 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim', opts = {} },
+      { 'folke/neodev.nvim',       opts = {} },
     },
     config = function()
+      require('lspconfig').eslint.setup({
+        settings = {
+          eslint = {
+            configFile = ".eslintrc.cjs", -- Specify the .cjs file here
+          },
+        },
+      })
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -606,12 +639,12 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        'stylua',     -- Used to format Lua code
         'shellcheck', -- Used to lint shell scripts
-        'shfmt', -- Used to format shell scripts
-        'gopls', -- Used to format Go code
-        'jsonls', -- Used to format JSON
-        'yamlls', -- Used to format YAML
+        'shfmt',      -- Used to format shell scripts
+        'gopls',      -- Used to format Go code
+        'jsonls',     -- Used to format JSON
+        'yamlls',     -- Used to format YAML
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -661,31 +694,49 @@ require('lazy').setup({
       --   }
       -- end,
       formatters_by_ft = {
-        lua = { 'stylua' },
-
-        go = { 'gofmt' },
-
-        javascript = {
-          { 'prettier', args = { '--trailing-comma', 'all' } },
-          { 'eslint' },
-        },
-
-        typescript = {
-          { 'prettier', args = { '--trailing-comma', 'all' } },
-          { 'eslint' },
-        },
-        javascriptreact = { 'prettier' },
-        typescriptreact = { 'prettier' },
-        svelte = { 'prettier' },
-        css = { 'prettier' },
-        html = { 'prettier' },
-        json = { 'prettier' },
-        yaml = { 'prettier' },
-        markdown = { 'prettier' },
-        graphql = { 'prettier' },
-        python = { 'isort', 'black' },
-        handlebars = {
-          { 'prettier', args = { '--parser', 'glimmer' } },
+        --   lua = { 'stylua' },
+        --
+        --   go = { 'gofmt' },
+        --
+        --   javascript = {
+        --     { 'prettier', args = { '--trailing-comma', 'all' } },
+        --     { 'eslint' },
+        --   },
+        --
+        --   typescript = {
+        --     { 'prettier', args = { '--trailing-comma', 'all' } },
+        --     { 'eslint' },
+        --   },
+        --   javascriptreact = { 'prettier' },
+        --   typescriptreact = { 'prettier' },
+        --   svelte = { 'prettier' },
+        --   css = { 'prettier' },
+        --   html = { 'prettier' },
+        --   json = { 'prettier' },
+        --   yaml = { 'prettier' },
+        --   markdown = { 'prettier' },
+        --   graphql = { 'prettier' },
+        --   python = { 'isort', 'black' },
+        --   handlebars = {
+        --     { 'prettier', args = { '--parser', 'glimmer' } },
+        --   },
+        --
+        formatters_by_ft = {
+          lua = { 'stylua' },
+          go = { 'gofmt' },
+          javascript = { 'prettier', 'eslint' },
+          typescript = { 'prettier', 'eslint' },
+          javascriptreact = { 'prettier' },
+          typescriptreact = { 'prettier' },
+          svelte = { 'prettier' },
+          css = { 'prettier' },
+          html = { 'prettier' },
+          json = { 'prettier' },
+          yaml = { 'prettier' },
+          markdown = { 'prettier' },
+          graphql = { 'prettier' },
+          python = { 'isort', 'black' },
+          handlebars = { 'prettier' },
         },
       },
     },
@@ -899,7 +950,6 @@ require('lazy').setup({
   --     require 'custom.dap'
   --   end,
   -- },
-  require 'kickstart.plugins.debug',
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -908,7 +958,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
