@@ -240,30 +240,34 @@ require('lazy').setup({
     -- LSP setup using nvim-lspconfig
     local lspconfig = require('lspconfig')
     local null_ls = require('null-ls')
-
+    local mason_path = vim.fn.stdpath("data") .. "/mason/bin/"
     -- ESLint setup with lspconfig
-    require 'lspconfig'.eslint.setup({
+    lspconfig.eslint.setup({
+      cmd = { mason_path .. "eslint-lsp", "--stdio" },
+      root_dir = lspconfig.util.root_pattern(".eslintrc.cjs", "package.json", ".git"),
       settings = {
         eslint = {
-          cmd = { "eslint-lsp", "--stdio" },
           enable = true,
-          configFile = ".eslintrc.cjs",                                                    -- Pointing to your ESLint config file
-          packageManager = "npm",                                                          -- You can use npm or yarn
-          validate = { "javascript", "typescript", "javascriptreact", "typescriptreact" }, -- Specify which languages to validate
-          run = "onType",                                                                  -- Option for when ESLint runs
+          configFile = vim.fn.getcwd() .. "/.eslintrc.cjs",
+          packageManager = "npm",
+          validate = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+          run = "onType",
         },
       },
       filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "html", "handlebars", "glimmer" },
+      on_attach = function(client, bufnr)
+        client.server_capabilities.documentFormattingProvider = false -- Prevent ESLint LSP from formatting
+      end,
     })
+
     -- null-ls setup for ESLint diagnostics and formatting
     null_ls.setup({
       sources = {
-        null_ls.builtins.diagnostics.eslint, -- Use ESLint for diagnostics
-        null_ls.builtins.formatting.eslint,  -- Use ESLint for formatting
+        null_ls.builtins.diagnostics.eslint,  -- Use ESLint for diagnostics
+        null_ls.builtins.formatting.eslint_d, -- Use eslint_d for better performance
       },
     })
-  end,
-  -- "gc" to comment visual regions/lines
+  end, -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim',    opts = {} },
 
   -- Here is a more advanced example where we pass configuration
@@ -450,13 +454,15 @@ require('lazy').setup({
       { 'folke/neodev.nvim',       opts = {} },
     },
     config = function()
-      require('lspconfig').eslint.setup({
-        settings = {
-          eslint = {
-            configFile = ".eslintrc.cjs", -- Specify the .cjs file here
-          },
-        },
-      })
+      -- require('lspconfig').eslint.setup({
+      --   root_dir = require('lspconfig').util.root_pattern(".eslintrc.cjs", "package.json", ".git"),
+      --   settings = {
+      --     eslint = {
+      --       configFile = vim.fn.getcwd() .. ".eslintrc.cjs",
+      --     },
+      --   },
+      -- })
+      --
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -724,8 +730,8 @@ require('lazy').setup({
         formatters_by_ft = {
           lua = { 'stylua' },
           go = { 'gofmt' },
-          javascript = { 'prettier', 'eslint' },
-          typescript = { 'prettier', 'eslint' },
+          javascript = { 'prettier' },
+          typescript = { 'prettier' },
           javascriptreact = { 'prettier' },
           typescriptreact = { 'prettier' },
           svelte = { 'prettier' },
