@@ -238,37 +238,37 @@ require('lazy').setup({
   --    require('Comment').setup({})
   config = function()
     -- LSP setup using nvim-lspconfig
-    local lspconfig = require('lspconfig')
-    local null_ls = require('null-ls')
-    local mason_path = vim.fn.stdpath("data") .. "/mason/bin/"
+    local lspconfig = require 'lspconfig'
+    local null_ls = require 'null-ls'
+    local mason_path = vim.fn.stdpath 'data' .. '/mason/bin/'
     -- ESLint setup with lspconfig
-    lspconfig.eslint.setup({
-      cmd = { mason_path .. "eslint-lsp", "--stdio" },
-      root_dir = lspconfig.util.root_pattern(".eslintrc.cjs", "package.json", ".git"),
+    lspconfig.eslint.setup {
+      cmd = { mason_path .. 'eslint-lsp', '--stdio' },
+      root_dir = lspconfig.util.root_pattern('.eslintrc.cjs', 'package.json', '.git'),
       settings = {
         eslint = {
           enable = true,
-          configFile = vim.fn.getcwd() .. "/.eslintrc.cjs",
-          packageManager = "npm",
-          validate = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
-          run = "onType",
+          configFile = vim.fn.getcwd() .. '/.eslintrc.cjs',
+          packageManager = 'npm',
+          validate = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+          run = 'onType',
         },
       },
-      filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "html", "handlebars", "glimmer" },
+      filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'handlebars', 'glimmer' },
       on_attach = function(client, bufnr)
         client.server_capabilities.documentFormattingProvider = false -- Prevent ESLint LSP from formatting
       end,
-    })
+    }
 
     -- null-ls setup for ESLint diagnostics and formatting
-    null_ls.setup({
+    null_ls.setup {
       sources = {
-        null_ls.builtins.diagnostics.eslint,  -- Use ESLint for diagnostics
+        null_ls.builtins.diagnostics.eslint, -- Use ESLint for diagnostics
         null_ls.builtins.formatting.eslint_d, -- Use eslint_d for better performance
       },
-    })
+    }
   end, -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',    opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -303,7 +303,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -351,10 +351,17 @@ require('lazy').setup({
           return vim.fn.executable 'make' == 1
         end,
       },
+      {
+        'isak102/telescope-git-file-history.nvim',
+        dependencies = {
+          'nvim-lua/plenary.nvim',
+          'tpope/vim-fugitive',
+        },
+      },
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -378,6 +385,7 @@ require('lazy').setup({
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -389,6 +397,7 @@ require('lazy').setup({
         -- },
         -- pickers = {}
         extensions = {
+
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
@@ -398,9 +407,13 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension 'git_file_history')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
+      local gfh_actions = require('telescope').extensions.git_file_history.actions
+      vim.keymap.set('n', '<leader>zb', gfh_actions.open_in_browser, { desc = 'Open in [B]rowser' })
+      vim.keymap.set('n', '<leader>zv', '<cmd>Telescope git_file_history<cr>', { noremap = true, silent = true })
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
@@ -411,7 +424,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
@@ -447,11 +459,11 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim',       opts = {} },
+      { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
       -- require('lspconfig').eslint.setup({
@@ -645,12 +657,12 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua',     -- Used to format Lua code
+        'stylua', -- Used to format Lua code
         'shellcheck', -- Used to lint shell scripts
-        'shfmt',      -- Used to format shell scripts
-        'gopls',      -- Used to format Go code
-        'jsonls',     -- Used to format JSON
-        'yamlls',     -- Used to format YAML
+        'shfmt', -- Used to format shell scripts
+        'gopls', -- Used to format Go code
+        'jsonls', -- Used to format JSON
+        'yamlls', -- Used to format YAML
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -699,52 +711,26 @@ require('lazy').setup({
       --     lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
       --   }
       -- end,
+
       formatters_by_ft = {
-        --   lua = { 'stylua' },
-        --
-        --   go = { 'gofmt' },
-        --
-        --   javascript = {
-        --     { 'prettier', args = { '--trailing-comma', 'all' } },
-        --     { 'eslint' },
-        --   },
-        --
-        --   typescript = {
-        --     { 'prettier', args = { '--trailing-comma', 'all' } },
-        --     { 'eslint' },
-        --   },
-        --   javascriptreact = { 'prettier' },
-        --   typescriptreact = { 'prettier' },
-        --   svelte = { 'prettier' },
-        --   css = { 'prettier' },
-        --   html = { 'prettier' },
-        --   json = { 'prettier' },
-        --   yaml = { 'prettier' },
-        --   markdown = { 'prettier' },
-        --   graphql = { 'prettier' },
-        --   python = { 'isort', 'black' },
-        --   handlebars = {
-        --     { 'prettier', args = { '--parser', 'glimmer' } },
-        --   },
-        --
-        formatters_by_ft = {
-          lua = { 'stylua' },
-          go = { 'gofmt' },
-          javascript = { 'prettier' },
-          typescript = { 'prettier' },
-          javascriptreact = { 'prettier' },
-          typescriptreact = { 'prettier' },
-          svelte = { 'prettier' },
-          css = { 'prettier' },
-          html = { 'prettier' },
-          json = { 'prettier' },
-          yaml = { 'prettier' },
-          markdown = { 'prettier' },
-          graphql = { 'prettier' },
-          python = { 'isort', 'black' },
-          handlebars = { 'prettier' },
-        },
+        lua = { 'stylua' },
+        go = { 'gofmt' },
+        javascript = { 'prettier', 'eslint' },
+        typescript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        svelte = { 'prettier' },
+        css = { 'prettier' },
+        html = { 'prettier' },
+        json = { 'prettier' },
+        yaml = { 'prettier' },
+        markdown = { 'prettier' },
+        graphql = { 'prettier' },
+        python = { 'isort', 'black' },
+        handlebars = { 'prettier' },
       },
+      -- Ensure only the first available formatter runs
+      stop_after_first = true,
     },
   },
 
@@ -964,7 +950,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  require 'kickstart.plugins.debug',
+  -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
