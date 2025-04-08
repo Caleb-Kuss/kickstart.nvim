@@ -13,6 +13,8 @@ return {
     config = function()
       local dap = require 'dap'
 
+      vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = 'DiagnosticSignError', linehl = '', numhl = '' })
+      vim.fn.sign_define('DapStopped', { text = '👉', texthl = 'DiagnosticSignWarn', linehl = 'Visual', numhl = '' })
       local debuggerPath = vim.fn.expand '~/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js'
       require('dap').adapters['pwa-node'] = {
         type = 'server',
