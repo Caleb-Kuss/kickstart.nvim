@@ -250,11 +250,11 @@ require('lazy').setup({
           enable = true,
           configFile = vim.fn.getcwd() .. '/.eslintrc.cjs',
           packageManager = 'npm',
-          validate = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+          validate = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python' },
           run = 'onType',
         },
       },
-      filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'handlebars', 'glimmer' },
+      filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'handlebars', 'glimmer', 'python' },
       on_attach = function(client, bufnr)
         client.server_capabilities.documentFormattingProvider = false -- Prevent ESLint LSP from formatting
       end,
