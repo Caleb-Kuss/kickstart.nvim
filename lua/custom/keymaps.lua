@@ -48,3 +48,9 @@ vim.keymap.set('n', '<leader>pe', vim.diagnostic.goto_prev, { desc = 'Go to prev
 vim.api.nvim_set_keymap('n', '<leader>Cr', ':let @+ = expand("%") | echo "Copied: " . expand("%")<CR>', { desc = 'Copy [R]elative [P]ath' })
 vim.api.nvim_set_keymap('n', '<leader>Ca', ':let @+ = expand("%:p") | echo "Copied: " . expand("%:p")<CR>', { desc = 'Copy [Absolute [P]ath' })
 vim.api.nvim_set_keymap('n', '<leader>Cf', ':let @+ = expand("%:t") | echo "Copied: " . expand("%:t")<CR>', { desc = 'Copy [F]ile [P]ath' })
+
+-- Toggle Terminal
+vim.api.nvim_set_keymap('n', '<Leader>tt', ':FloatermToggle<CR>', { desc = 'Toggle [T]erminal' })
+vim.api.nvim_set_keymap('n', '<Leader>tn', ':FloatermNew<CR>', { desc = 'New [T]erminal' })
+vim.api.nvim_set_keymap('n', '<Leader>tN', ':FloatermNext<CR>', { desc = 'Next [T]erminal' })
+vim.api.nvim_set_keymap('n', '<Leader>tP', ':FloatermPrev<CR>', { desc = 'Prev [T]erminal' })
