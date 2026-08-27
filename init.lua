@@ -181,14 +181,9 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 -- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
 -- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- Split navigation with CTRL+<hjkl> is handled by vim-tmux-navigator
+-- (see lua/custom/plugins/tmux-navigation.lua), which also falls back to
+-- plain <C-w> window movement when not inside a tmux pane.
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -236,38 +231,7 @@ require('lazy').setup({
   --
   --  This is equivalent to:
   --    require('Comment').setup({})
-  config = function()
-    -- LSP setup using nvim-lspconfig
-    local lspconfig = require 'lspconfig'
-    local null_ls = require 'null-ls'
-    local mason_path = vim.fn.stdpath 'data' .. '/mason/bin/'
-    -- ESLint setup with lspconfig
-    lspconfig.eslint.setup {
-      cmd = { mason_path .. 'eslint-lsp', '--stdio' },
-      root_dir = lspconfig.util.root_pattern('.eslintrc.cjs', 'package.json', '.git'),
-      settings = {
-        eslint = {
-          enable = true,
-          configFile = vim.fn.getcwd() .. '/.eslintrc.cjs',
-          packageManager = 'npm',
-          validate = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python' },
-          run = 'onType',
-        },
-      },
-      filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'handlebars', 'glimmer', 'python' },
-      on_attach = function(client, bufnr)
-        client.server_capabilities.documentFormattingProvider = false -- Prevent ESLint LSP from formatting
-      end,
-    }
-
-    -- null-ls setup for ESLint diagnostics and formatting
-    null_ls.setup {
-      sources = {
-        null_ls.builtins.diagnostics.eslint, -- Use ESLint for diagnostics
-        null_ls.builtins.formatting.eslint_d, -- Use eslint_d for better performance
-      },
-    }
-  end, -- "gc" to comment visual regions/lines
+  -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
   -- Here is a more advanced example where we pass configuration

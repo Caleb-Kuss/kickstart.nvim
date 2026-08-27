@@ -5,3 +5,6 @@ if uname.sysname == 'Darwin' then
   vim.opt.eol = false
 end
 vim.opt.fixendofline = false
+
+-- Relative line numbers (used with absolute `number` for hybrid numbering)
+vim.opt.relativenumber = true
